@@ -3,19 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<<<<<<< HEAD
-    <title>My Website</title>
-    <link rel="stylesheet" href="styles.css">
-</head>
-<body>
-        <div id="h1">
-            <div id="title">LittleShield</div>
-            <div id="container"> <img id="profile" src="profile.jpeg" alt="profile"></div>
-        </div>
-
-    <script src="script.js"></script>
-=======
     <title>Home Page</title>
+    <script type="module" src="firebase.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" integrity="sha512-Evv84Mr4kqVGRNSgIGL/F/aIDqQb7xQ2vcrdIwxfjThSH8CSR7PBEakCr51Ck+w+/U6swU2Im1vVX0SVk9ABhg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     <style>
         * {
@@ -64,8 +53,7 @@
             position: absolute;
             top: 60px;
             right: 20px;
-            width: 187px;
-            height: 250px;
+            width: 200px;
             background-color: #fff;
             border-radius: 10px;
             box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.1);
@@ -117,49 +105,54 @@
         .signout-btn i {
             margin-right: 5px;
         }
-        
+        .option {
+           
+            font-size: 24px;
+            margin: 70px auto;
+            padding: 10px;
+            border: 2px solid black;
+            width: 250px;
+            height: 70px;
+            border-radius: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-color: #E0FFB6;
+            cursor: pointer;
+        }
         a {
          text-decoration: none;
          color: inherit; /* Optional: Keeps the text color unchanged */
          }
          .back {
-           width: 120px;
-           height: 0px;
-           background-color:#E0FFB6;
-           border-radius: 10px;
-           padding: 10px 20px;
-           margin: auto;
-           font-family: "Inter", sans-serif;
-           font-weight: bold;
-           color: #E0FFB6;
-           float:left;
-           margin-top: -58px;
-           display: flex;
-           margin-left: -35px;
-           justify-content: center;
-           background: none;
-           border: none;
-           
-       }
-
-          .back:hover {
-           
-           background-color: #E0FFB6;
-           color: #000000;
-       }
-       #myButton{
-        background-color: #E0FFB6;
-        border: none;
-       }
+            width: 120px;
+            height: 0px;
+            background-color:#E0FFB6;
+            border-radius: 10px;
+            padding: 10px 20px;
+            margin: auto;
+            font-family: "Inter", sans-serif;
+            font-weight: bold;
+            color: #E0FFB6;
+            float:left;
+            margin-top: -58px;
+            display: flex;
+            margin-left: -35px;
+            justify-content: center;
+            background: none;
+            border: none;
+        }
+        .back:hover {
+            background-color: #E0FFB6;
+            color: #000000;
+        }
     </style>
 </head>
 <body>
     <header>
         <h1>LittleShield</h1>
-        <div class="back" onclick="homepage()">
-            <a href="Home.html">
+        <div class="back">
             <button id="myButton"><i class="fa-solid fa-chevron-left"></i></button>
-        </a>
         </div>
         <div class="profile" onclick="toggleProfile()">
             <i class="fa-solid fa-user-large user"></i>
@@ -171,9 +164,7 @@
             </div>
             <div class="profile-content">
                 <h2>User Name</h2>
-            </div>
-            <div class="profile-content">
-                <h2>xyz@gamil.com</h2>
+                <h2>xyz@gmail.com</h2>
             </div>
             <div class="separator"></div>
             <button class="signout-btn" onclick="redirectToSignup()">
@@ -182,7 +173,11 @@
         </div>
     </header>
 
-   
+    <main>
+        <div class="option" ><a href="Track.html"> Track My Child</a></div>
+        <div class="option"><a href="set.html">Set Location</a></div>
+        <div class="option"><a href="zone.html">Zone Boundary</a></div>
+    </main>
 
     <script>
         function toggleProfile() {
@@ -201,12 +196,7 @@
             }
         }
     </script>
-    <script>
-        document.getElementById("myButton").addEventListener("click", function() {
-          window.history.back();
-        });
-      </script>
     
->>>>>>> 732be52722718bd95ec71fd399e9934afd6776f7
+    
 </body>
 </html>

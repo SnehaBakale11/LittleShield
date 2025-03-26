@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Child's Live Location</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" integrity="sha512-Evv84Mr4kqVGRNSgIGL/F/aIDqQb7xQ2vcrdIwxfjThSH8CSR7PBEakCr51Ck+w+/U6swU2Im1vVX0SVk9ABhg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    
+    <style>
+        * {
+            padding: 0;
+            margin: 0;
+            box-sizing: border-box;
+        }
+        body {
+            background-image: url(Background.jpg);
+            background-size: cover;
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        header {
+            width: 100%;
+            background-color: #E0FFB6;
+            padding: 10px 0;
+            text-align: center;
+            position: relative;
+        }
+        header h1 {
+            font-size: 40px;
+            font-family: Georgia, serif;
+            font-weight: 500;
+        }
+        .profile {
+            position: absolute;
+            right: 20px;
+            top: 20px;
+            cursor: pointer;
+        }
+        .profile-card {
+            position: absolute;
+            top: 60px;
+            right: 20px;
+            width: 187px;
+            background-color: #fff;
+            border-radius: 10px;
+            padding: 20px;
+            display: none;
+            box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.1);
+        }
+        .signout-btn {
+            width: 100%;
+            padding: 10px;
+            font-size: 16px;
+            color: black;
+            border: 2px solid black;
+            border-radius: 5px;
+            background-color: transparent;
+            cursor: pointer;
+        }
+        .back {
+            position: absolute;
+            left: 20px;
+            top: 20px;
+            background: none;
+            border: none;
+            font-size: 20px;
+            cursor: pointer;
+        }
+        #map {
+            height: 80vh;
+            width: 80%;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>LittleShield</h1>
+        <button class="back" onclick="history.back()"><i class="fa-solid fa-chevron-left"></i></button>
+        <div class="profile" onclick="toggleProfile()">
+            <i class="fa-solid fa-user-large"></i>
+        </div>
+        <div class="profile-card" id="profileCard">
+            <h2>User Name</h2>
+            <h2>xyz@gmail.com</h2>
+            <button class="signout-btn" onclick="redirectToSignup()">
+                <i class="fa-solid fa-arrow-right-to-bracket"></i> Sign out
+            </button>
+        </div>
+    </header>
+
+    <h2>Live Location of the Child</h2>
+    <div id="map"></div>
+    
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js";
+        import { getDatabase, ref, onValue } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-database.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyAV3By2TBg0V9DJSO0yHF000hUJgQ99xVA",
+            authDomain: "little-shield-49ee9.firebaseapp.com",
+            databaseURL: "https://little-shield-49ee9-default-rtdb.firebaseio.com",
+            projectId: "little-shield-49ee9",
+            storageBucket: "little-shield-49ee9.appspot.com",
+            messagingSenderId: "399522702930",
+            appId: "1:399522702930:web:50d5b862d85e16ada4618b"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const database = getDatabase(app);
+
+        function fetchLocation() {
+            const locationRef = ref(database, "alerts/latest");
+            onValue(locationRef, (snapshot) => {
+                const data = snapshot.val();
+                if (data && data.location) {
+                    const [lat, lng] = data.location.split(",").map(Number);
+                    if (!isNaN(lat) && !isNaN(lng)) {
+                        const newPosition = { lat, lng };
+                        window.map.setCenter(newPosition);
+                        window.marker.setPosition(newPosition);
+                    }
+                }
+            });
+        }
+
+        window.fetchLocation = fetchLocation;
+    </script>
+
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyD7oQDoxAVKBCD0v7tcW2_-p9bj5jkxpQo&callback=initMap" async defer></script>
+    <script>
+        function initMap() {
+            window.map = new google.maps.Map(document.getElementById("map"), {
+                center: { lat: 18.45767487123601, lng: 73.85080695187212 },
+                zoom: 15
+            });
+            window.marker = new google.maps.Marker({
+                position: { lat: 18.45767487123601, lng: 73.85080695187212 },
+                map: window.map
+            });
+            fetchLocation();
+        }
+    </script>
+    
+    <script>
+        function toggleProfile() {
+            var profileCard = document.getElementById("profileCard");
+            profileCard.style.display = (profileCard.style.display === "block") ? "none" : "block";
+        }
+    
+        function redirectToSignup() {
+            var confirmation = confirm("Are you sure you want to sign out?");
+            if (confirmation) {
+                window.location.href = "signup.html";
+            } else {
+                document.getElementById("profileCard").style.display = "none";
+            }
+        }
+    </script>
+</body>
+</html>
