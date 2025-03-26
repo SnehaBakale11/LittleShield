@@ -32,33 +32,6 @@
             font-family: Georgia, serif;
             font-weight: 500;
         }
-        .profile {
-            position: absolute;
-            right: 20px;
-            top: 20px;
-            cursor: pointer;
-        }
-        .profile-card {
-            position: absolute;
-            top: 60px;
-            right: 20px;
-            width: 187px;
-            background-color: #fff;
-            border-radius: 10px;
-            padding: 20px;
-            display: none;
-            box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.1);
-        }
-        .signout-btn {
-            width: 100%;
-            padding: 10px;
-            font-size: 16px;
-            color: black;
-            border: 2px solid black;
-            border-radius: 5px;
-            background-color: transparent;
-            cursor: pointer;
-        }
         .back {
             position: absolute;
             left: 20px;
@@ -79,16 +52,6 @@
     <header>
         <h1>LittleShield</h1>
         <button class="back" onclick="history.back()"><i class="fa-solid fa-chevron-left"></i></button>
-        <div class="profile" onclick="toggleProfile()">
-            <i class="fa-solid fa-user-large"></i>
-        </div>
-        <div class="profile-card" id="profileCard">
-            <h2>User Name</h2>
-            <h2>xyz@gmail.com</h2>
-            <button class="signout-btn" onclick="redirectToSignup()">
-                <i class="fa-solid fa-arrow-right-to-bracket"></i> Sign out
-            </button>
-        </div>
     </header>
 
     <h2>Live Location of the Child</h2>
@@ -141,22 +104,6 @@
                 map: window.map
             });
             fetchLocation();
-        }
-    </script>
-    
-    <script>
-        function toggleProfile() {
-            var profileCard = document.getElementById("profileCard");
-            profileCard.style.display = (profileCard.style.display === "block") ? "none" : "block";
-        }
-    
-        function redirectToSignup() {
-            var confirmation = confirm("Are you sure you want to sign out?");
-            if (confirmation) {
-                window.location.href = "signup.html";
-            } else {
-                document.getElementById("profileCard").style.display = "none";
-            }
         }
     </script>
 </body>
