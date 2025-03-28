@@ -1,0 +1,117 @@
+body{
+    background: #21bcff;
+    margin:0px;
+    width: 100%;
+}
+.box1{
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    grid-template-rows: repeat(3, 1fr) ;
+    height :70vh;
+}
+#h1 {
+    display: flex;
+    justify-content: space-between;
+    align-items: center; 
+    width: 100%;
+    background-color: #E0FFB6;
+}
+
+@media screen and (min-width: 950px) {
+    #title {
+        display: flex;
+        justify-content: center;
+        font-size: 70px;
+        flex: 1; 
+        text-align: center;
+        font-weight: bold;
+        margin-left: 70px;
+    }
+    #container{
+        display: flex;
+        justify-content: flex-start;
+        font-size: 10px;
+        margin-right: 20px;
+    }
+    #profile{
+        width: 50px;
+        height: 50px;
+        border-radius: 50%;
+    }
+    .click{
+        font-size: 34px;
+        margin:10px;
+        background: #E0FFB6;
+        margin-left: 80px;
+        margin-right: 80px;
+        margin-top: 60px;
+        border-radius: 20px;
+    }
+    #click1{
+        grid-row-start: 1;
+        margin-bottom: 20px;
+        grid-column: 2; grid-row: 1; 
+    }
+    #click2{
+        grid-row-start: 2;
+        margin-bottom: 20px;
+        grid-column: 2; grid-row: 2; 
+        
+    }
+    #click3{
+        grid-row-start: 3;
+        margin-bottom: 20px;
+        grid-column: 2; grid-row: 3; 
+
+    }
+
+}
+
+@media screen and (max-width: 950px) {
+    #title {
+        background: #E0FFB6;
+        margin: 0px;
+        display: flex;
+        justify-content: center;
+        font-size: 50px; 
+        flex: 1; 
+        text-align: center;
+        font-weight: bold;
+        margin-left: 70px;
+    }
+    #container{
+        display: flex;
+        justify-content: flex-end;
+        margin-right: 20px;
+    }
+    #profile{
+        width: 50px;
+        height: 50px;
+        border-radius: 50%;
+    }
+    .click{
+        font-size: 24px;
+        margin :10px;
+        margin-left: 20px;
+        margin-right: 20px;
+        margin-top: 60px;
+        margin-bottom: 60px;
+        background: #E0FFB6;
+        border-radius: 20px;
+    }
+    #click1{
+        grid-row-start: 1;
+        margin-bottom: 20px;
+        grid-column: 2; grid-row: 1;
+    }
+    #click2{
+        grid-row-start: 2;
+        margin-bottom: 20px;
+        grid-column: 2; grid-row: 2; 
+    }
+    #click3{
+        grid-row-start: 3;
+        margin-bottom: 20px;
+        grid-column: 2; grid-row: 3; 
+    }
+}

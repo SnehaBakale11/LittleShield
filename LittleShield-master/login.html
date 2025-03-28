@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Little Shield</title>
+    <style>
+        * {
+            padding: 0;
+            margin: 0;
+            box-sizing: border-box;
+        }
+        body{
+            background-image: url(Background.jpg);
+            background-size: 1600px;
+        }
+        header h1 {
+            box-shadow: 5px 5px 5px rgb(184, 183, 183);
+            padding: 5px;
+            font-size: 40px;
+            font-family:Georgia, 'Times New Roman', Times, serif;
+            font-weight: 500;
+            /* font-style: oblique; */
+            text-align: center;
+            background-color: #E0FFB6;
+            height: 70px;
+            line-height: 50px;
+        }
+        main h1 {
+            margin: 50px;
+            text-align: center;
+            font-family: Georgia, 'Times New Roman', Times, serif;
+            font-size: 27px;
+            font-weight: 500;
+        }
+        main form {
+            border: 2px solid black;
+            width: 250px;
+            padding: 18px;
+            margin: auto;
+            border-radius: 21px;
+            opacity: 0.95;
+        }
+        main input {
+            border-radius: 4px;
+            width: 100%;
+            padding: 5px;
+            margin: 5px 0;
+        }
+        
+        footer {
+            text-align: center;
+            margin-top: 15px;
+            font-family: Verdana, Geneva, Tahoma, sans-serif;
+        }
+        footer span {
+            font-weight: bold;
+            font-size: 14px;
+        }
+        button {
+            background-color: #17A0CE;
+            border: none;
+            color: aliceblue;
+            font-weight: bold;
+            font-size: 20px;
+            padding: 10px 17px;
+            border-radius: 7px;
+            cursor: pointer;
+            text-align: center;
+            margin: 20px;
+        }
+            
+    </style>
+</head>
+<body>
+    <header>
+        <h1>LittleShield</h1>
+    </header>
+
+    <main>
+        <h1>Login</h1>
+        <form action="/action_page.php">
+            <label for="email">Email ID:</label><br>
+            <input type="email" id="email" name="email" required placeholder="xyz@gamil.com"><br><br>
+            
+            <label for="username">Username:</label><br>
+            <input type="text" id="username" name="username" required placeholder="Name123"><br><br>
+            
+    
+            <label for="password">Password:</label><br>
+            <input type="password" id="password" name="password" required placeholder="Password"><br><br>
+            
+            
+           
+            
+        </form>
+          
+    </main>
+
+    <footer>
+        <span>Dont't have an account?<a href="SignUp.html" class="button-class">  SignUp</a></span>
+        <br>
+        <a href="Home.html">
+            <button>Login</button>
+        </a>
+    </footer>
+</body>
+</html>

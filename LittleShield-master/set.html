@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Set Geofencing</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" integrity="sha512-Evv84Mr4kqVGRNSgIGL/F/aIDqQb7xQ2vcrdIwxfjThSH8CSR7PBEakCr51Ck+w+/U6swU2Im1vVX0SVk9ABhg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <style>
+        * {
+            padding: 0;
+            margin: 0;
+            box-sizing: border-box;
+        }
+        body {
+            background-image: url(Background.jpg);
+            background-size: cover;
+            text-align: center;
+        }
+        header {
+            position: relative;
+        }
+        header h1 {
+            box-shadow: 5px 5px 5px rgb(184, 183, 183);
+            padding: 5px;
+            font-size: 40px;
+            font-family: Georgia, 'Times New Roman', Times, serif;
+            font-weight: 500;
+            text-align: center;
+            background-color: #E0FFB6;
+            height: 70px;
+            line-height: 50px;
+        }
+        .map-container {
+            width: 80%;
+            height: 500px;
+            margin: 20px auto;
+            border: 2px solid #000;
+            border-radius: 10px;
+            overflow: hidden;
+            position: relative;
+        }
+        #map {
+            width: 100%;
+            height: 100%;
+        }
+        .radius-slider-container {
+            margin-top: 10px;
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .radius-slider {
+            width: 150px;
+            margin-top: 5px;
+        }
+        .radius-value {
+            font-size: 16px;
+            font-weight: bold;
+            margin-top: 5px;
+        }
+        .set-button {
+            margin-top: 10px;
+            padding: 8px 16px;
+            font-size: 16px;
+            font-weight: bold;
+            border: none;
+            border-radius: 5px;
+            background-color: #28a745;
+            color: white;
+            cursor: pointer;
+        }
+        .back {
+            position: absolute;
+            left: 20px;
+            top: 15px;
+            cursor: pointer;
+        }
+        .back button {
+            background: none;
+            border: none;
+            font-size: 20px;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>LittleShield</h1>
+        <div class="back">
+            <button id="myButton"><i class="fa-solid fa-chevron-left"></i></button>
+        </div>
+    </header>
+    
+    <div class="map-container">
+        <div id="map"></div>
+    </div>
+    <div class="radius-slider-container">
+        <label for="radius-slider">Set Radius:</label>
+        <input type="range" id="radius-slider" class="radius-slider" min="100" max="2000" step="50" value="500" oninput="updateRadius(this.value)">
+        <div class="radius-value" id="radius-value">500 meters</div>
+        <button class="set-button" onclick="setGeofence()">Set</button>
+    </div>
+
+    <script>
+        let map;
+        let marker;
+        let circle;
+
+        function initMap() {
+            map = new google.maps.Map(document.getElementById('map'), {
+                center: { lat: 37.7749, lng: -122.4194 },
+                zoom: 12
+            });
+
+            map.addListener("click", function(event) {
+                placeMarker(event.latLng);
+            });
+        }
+
+        function placeMarker(location) {
+            if (marker) {
+                marker.setMap(null);
+            }
+            marker = new google.maps.Marker({
+                position: location,
+                map: map,
+                draggable: true
+            });
+
+            drawGeofence(location, parseInt(document.getElementById('radius-slider').value));
+
+            marker.addListener("dragend", function(event) {
+                drawGeofence(event.latLng, circle.getRadius());
+            });
+        }
+
+        function drawGeofence(center, radius) {
+            if (circle) {
+                circle.setMap(null);
+            }
+            circle = new google.maps.Circle({
+                center: center,
+                radius: radius,
+                strokeColor: "#FF0000",
+                strokeOpacity: 0.8,
+                strokeWeight: 2,
+                fillColor: "#FF0000",
+                fillOpacity: 0.35,
+                map: map
+            });
+        }
+
+        function updateRadius(value) {
+            if (circle) {
+                circle.setRadius(parseInt(value));
+            }
+            document.getElementById('radius-value').textContent = value + ' meters';
+        }
+
+        function setGeofence() {
+            alert("Geofence set with radius: " + circle.getRadius() + " meters at location: " + marker.getPosition());
+        }
+
+        document.getElementById("myButton").addEventListener("click", function() {
+            window.location.href = "home.html"; // Ensure this is the correct filename
+        });
+    </script>
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyD7oQDoxAVKBCD0v7tcW2_-p9bj5jkxpQo&callback=initMap" async defer></script>
+</body>
+</html>
