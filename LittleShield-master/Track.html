@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Child's Live Location</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" integrity="sha512-Evv84Mr4kqVGRNSgIGL/F/aIDqQb7xQ2vcrdIwxfjThSH8CSR7PBEakCr51Ck+w+/U6swU2Im1vVX0SVk9ABhg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
-    
+
     <style>
         * {
             padding: 0;
@@ -73,6 +73,19 @@
             width: 80%;
             margin-top: 20px;
         }
+        #sosAlert {
+            position: fixed;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: red;
+            color: white;
+            font-size: 24px;
+            padding: 10px 20px;
+            border-radius: 10px;
+            font-weight: bold;
+            display: none;
+        }
     </style>
 </head>
 <body>
@@ -93,61 +106,68 @@
 
     <h2>Live Location of the Child</h2>
     <div id="map"></div>
+    <div id="sosAlert">🚨 CHILD IN DANGER! 🚨</div>
     
+    <audio id="sosSound">
+        <source src="alert.mp3" type="audio/mpeg">
+    </audio>
+
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.6.0/firebase-app.js";
         import { getDatabase, ref, onValue } from "https://www.gstatic.com/firebasejs/10.6.0/firebase-database.js";
 
         const firebaseConfig = {
-                apiKey: "AIzaSyAV3By2TBg0V9DJSO0yHF000hUJgQ99xVA",
-                authDomain: "little-shield-49ee9.firebaseapp.com",
-                databaseURL: "https://little-shield-49ee9-default-rtdb.firebaseio.com",
-                projectId: "little-shield-49ee9",
-                storageBucket: "little-shield-49ee9.firebasestorage.app",
-                messagingSenderId: "399522702930",
-                appId: "1:399522702930:web:50d5b862d85e16ada4618b"
-                };
+            apiKey: "AIzaSyAV3By2TBg0V9DJSO0yHF000hUJgQ99xVA",
+            authDomain: "little-shield-49ee9.firebaseapp.com",
+            databaseURL: "https://little-shield-49ee9-default-rtdb.firebaseio.com",
+            projectId: "little-shield-49ee9",
+            storageBucket: "little-shield-49ee9.appspot.com",
+            messagingSenderId: "399522702930",
+            appId: "1:399522702930:web:50d5b862d85e16ada4618b"
+        };
 
         const app = initializeApp(firebaseConfig);
         const database = getDatabase(app);
 
         function fetchLocation() {
-    const locationRef = ref(database, "locations");
-    onValue(locationRef, (snapshot) => {
-        const data = snapshot.val();
-        console.log("Fetched Data:", data); // Debugging
+            const locationRef = ref(database, "locations");
 
-        if (data) {
-            const keys = Object.keys(data);  // Get all keys
-            const latestKey = keys[keys.length - 1];  // Get the latest entry
-            const latestData = data[latestKey];  // Fetch latest coordinates
-            
-            console.log("Latest Data:", latestData); // Debugging
-            
-            if (latestData && latestData.latitude && latestData.longitude) {
-                const lat = parseFloat(latestData.latitude);
-                const lng = parseFloat(latestData.longitude);
+            onValue(locationRef, (snapshot) => {
+                if (snapshot.exists()) {
+                    const data = snapshot.val();
+                    console.log("Fetched Data:", data);
 
-                console.log("Latitude:", lat, "Longitude:", lng); // Debugging
+                    const keys = Object.keys(data);
+                    const latestKey = keys[keys.length - 1]; 
+                    const latestData = data[latestKey];
 
-                if (!isNaN(lat) && !isNaN(lng)) {
-                    const newPosition = { lat, lng };
-                    window.map.setCenter(newPosition);
-                    window.marker.setPosition(newPosition);
+                    if (latestData && latestData.latitude && latestData.longitude) {
+                        const lat = parseFloat(latestData.latitude);
+                        const lng = parseFloat(latestData.longitude);
+
+                        console.log("Latitude:", lat, "Longitude:", lng);
+
+                        if (!isNaN(lat) && !isNaN(lng)) {
+                            const newPosition = { lat, lng };
+                            window.map.setCenter(newPosition);
+                            window.marker.setPosition(newPosition);
+
+                            showSOSAlert();
+                        }
+                    }
+                } else {
+                    console.error("No data found in 'locations'. Check Firebase Database.");
                 }
-            }
-        } else {
-            console.log("No data found at 'location'");
+            }, (error) => {
+                console.error("Firebase Read Error:", error);
+            });
         }
-    });
-}
-
 
         window.fetchLocation = fetchLocation;
     </script>
 
-    <!-- <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyD7oQDoxAVKBCD0v7tcW2_-p9bj5jkxpQo&callback=initMap" async defer></script> -->
     <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyD7oQDoxAVKBCD0v7tcW2_-p9bj5jkxpQo&callback=initMap"></script>
+    
     <script>
         function initMap() {
             window.map = new google.maps.Map(document.getElementById("map"), {
@@ -158,16 +178,52 @@
                 position: { lat: 18.457674, lng: 73.850806 },
                 map: window.map
             });
-            fetchLocation();
+
+            window.fetchLocation();
         }
-    </script>
-    
-    <script>
+
+        function showSOSAlert() {
+    let sosMessage = document.getElementById("sosAlert");
+    let audio = document.getElementById("sosSound");
+
+    // Display the alert message
+    sosMessage.style.display = "block";
+
+    // Blinking effect for the SOS alert
+    let isVisible = true;
+    let blinkInterval = setInterval(() => {
+        sosMessage.style.visibility = isVisible ? "visible" : "hidden";
+        isVisible = !isVisible;
+    }, 500);
+
+    // Stop alert and sound after 10 seconds
+    setTimeout(() => {
+        clearInterval(blinkInterval);
+        sosMessage.style.display = "none";
+        audio.pause(); // Stop the audio
+        audio.currentTime = 0; // Reset to the beginning
+    }, 10000);
+
+    // Ensure audio plays after user interaction
+    function playAudio() {
+        audio.play().catch(error => console.error("Audio playback failed:", error));
+        document.body.removeEventListener("click", playAudio);
+    }
+
+    // If autoplay is blocked, wait for user interaction
+    audio.play().catch(() => {
+        console.warn("Autoplay blocked. Waiting for user interaction...");
+        document.body.addEventListener("click", playAudio);
+    });
+}
+
+
+
         function toggleProfile() {
             var profileCard = document.getElementById("profileCard");
             profileCard.style.display = (profileCard.style.display === "block") ? "none" : "block";
         }
-    
+
         function redirectToSignup() {
             var confirmation = confirm("Are you sure you want to sign out?");
             if (confirmation) {
