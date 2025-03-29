@@ -129,6 +129,8 @@
         const app = initializeApp(firebaseConfig);
         const database = getDatabase(app);
 
+        let isFirstFetch = true; // Flag to prevent SOS alert on first fetch
+
         function fetchLocation() {
             const locationRef = ref(database, "locations");
 
@@ -151,6 +153,11 @@
                             const newPosition = { lat, lng };
                             window.map.setCenter(newPosition);
                             window.marker.setPosition(newPosition);
+
+                            if (isFirstFetch) {
+                                isFirstFetch = false; // Skip SOS alert on first fetch
+                                return;
+                            }
 
                             showSOSAlert();
                         }
@@ -183,41 +190,33 @@
         }
 
         function showSOSAlert() {
-    let sosMessage = document.getElementById("sosAlert");
-    let audio = document.getElementById("sosSound");
+            let sosMessage = document.getElementById("sosAlert");
+            let audio = document.getElementById("sosSound");
 
-    // Display the alert message
-    sosMessage.style.display = "block";
+            sosMessage.style.display = "block";
 
-    // Blinking effect for the SOS alert
-    let isVisible = true;
-    let blinkInterval = setInterval(() => {
-        sosMessage.style.visibility = isVisible ? "visible" : "hidden";
-        isVisible = !isVisible;
-    }, 500);
+            let isVisible = true;
+            let blinkInterval = setInterval(() => {
+                sosMessage.style.visibility = isVisible ? "visible" : "hidden";
+                isVisible = !isVisible;
+            }, 500);
 
-    // Stop alert and sound after 10 seconds
-    setTimeout(() => {
-        clearInterval(blinkInterval);
-        sosMessage.style.display = "none";
-        audio.pause(); // Stop the audio
-        audio.currentTime = 0; // Reset to the beginning
-    }, 10000);
+            setTimeout(() => {
+                clearInterval(blinkInterval);
+                sosMessage.style.display = "none";
+                audio.pause();
+                audio.currentTime = 0;
+            }, 10000);
 
-    // Ensure audio plays after user interaction
-    function playAudio() {
-        audio.play().catch(error => console.error("Audio playback failed:", error));
-        document.body.removeEventListener("click", playAudio);
-    }
+            function playAudio() {
+                audio.play().catch(error => console.error("Audio playback failed:", error));
+                document.body.removeEventListener("click", playAudio);
+            }
 
-    // If autoplay is blocked, wait for user interaction
-    audio.play().catch(() => {
-        console.warn("Autoplay blocked. Waiting for user interaction...");
-        document.body.addEventListener("click", playAudio);
-    });
-}
-
-
+            audio.play().catch(() => {
+                document.body.addEventListener("click", playAudio);
+            });
+        }
 
         function toggleProfile() {
             var profileCard = document.getElementById("profileCard");
@@ -225,8 +224,7 @@
         }
 
         function redirectToSignup() {
-            var confirmation = confirm("Are you sure you want to sign out?");
-            if (confirmation) {
+            if (confirm("Are you sure you want to sign out?")) {
                 window.location.href = "signup.html";
             } else {
                 document.getElementById("profileCard").style.display = "none";
